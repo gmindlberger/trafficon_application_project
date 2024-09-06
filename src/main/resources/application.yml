@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: TrafficScanner
+  flyway:
+    enabled: true
+    user: postgres
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    schemas: application
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/exampledb
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    hikari:
+      schema: application
+  sql:
+    init:
+      platform: postgres
