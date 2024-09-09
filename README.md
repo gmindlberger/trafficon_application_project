@@ -14,7 +14,7 @@ This project is a simple Spring Boot-based REST API for managing and displaying 
 **POST** `/create`
 
 Example Request:
-```bash
+
 POST http://localhost:8080/create
 Content-Type: application/json
 
@@ -25,3 +25,38 @@ Content-Type: application/json
   "severity": "LOW",
   "district": "Salzburg"
 }
+
+### Delete All Traffic Jams
+**DELETE** '/deleteAllJams'
+
+Example Request:
+
+DELETE http://localhost:8080/deleteAllJams
+
+### Delete a Traffic Jam by Location
+**DELETE** '/deleteJamByLocation/{location}'
+
+Example Request:
+
+@location=A2
+DELETE http://localhost:8080/deleteJamByLocation/{{location}}
+
+### Get Traffic Jams by District
+**GET** '/getJamsByDistrict/{district}'
+
+Example Request:
+
+@district=Salzburg
+GET http://localhost:8080/getJamsByDistrict/{{district}}
+
+### Get All Traffic Jams
+**GET** '/getAllJams'
+
+Example Request:
+
+GET http://localhost:8080/getAllJams
+
+
+
+
+
