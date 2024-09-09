@@ -1,6 +1,6 @@
 # Trafficon application project
 
-This project is a simple Spring Boot-based REST API for managing and displaying current traffic jams. It provides endpoints to create, retrieve, and delete traffic jams, as well as filtering jams by district. The system is designed to be flexible and easily extendable, allowing for additional features or integrations to be added as needed, such as real-time traffic updates, historical data analysis, or integration with external services.
+This project is a Spring Boot-based REST API for managing and displaying current traffic jams. It provides endpoints to create, retrieve, and delete traffic jams, as well as filtering jams by district. The system uses a PostgreSQL database for persistent storage of traffic jam data. It is designed to be flexible and easily extendable, allowing for additional functionality, such as real-time traffic updates, historical data analysis, or integration with external services.
 
 ## Features
 - **Create a Traffic Jam**: You can create a traffic jam with details such as location, description, and severity.
