@@ -1,4 +1,4 @@
-# trafficon_application_project
+# Trafficon application project
 
 This project is a simple Spring Boot-based REST API for managing and displaying current traffic jams. It provides endpoints to create, retrieve, and delete traffic jams, as well as filtering jams by district.
 
