@@ -24,8 +24,13 @@ class TrafficScannerApplicationTests {
     @MockBean
     private JamRepository jamRepository;
 
+    private Jam sampleJam;
+
     @BeforeEach
     void setUp() {
+        sampleJam = new Jam();
+        sampleJam.setLocation("TestLocation");
+        sampleJam.setDistrict("TestDistrict");
     }
 
     @Test
@@ -33,61 +38,57 @@ class TrafficScannerApplicationTests {
     }
 
     @Test
-    void testDeleteAll() {
-        doNothing().when(jamRepository).deleteAll();
+    void shouldDeleteAllJams() {
         jamService.deleteAll();
         verify(jamRepository, times(1)).deleteAll();
     }
 
     @Test
-    void testFindAll() {
-        Jam jam = new Jam();
-        when(jamRepository.findAll()).thenReturn(Collections.singletonList(jam));
+    void shouldFindAllJams() {
+        when(jamRepository.findAll()).thenReturn(Collections.singletonList(sampleJam));
         List<Jam> jams = jamService.findAll();
         assertEquals(1, jams.size());
-        assertEquals(jam, jams.getFirst());
+        assertEquals(sampleJam, jams.getFirst());
     }
 
     @Test
-    void testCreateNewJam() {
-        Jam jam = new Jam();
-        jam.setLocation("TestLocation");
-        jam.setDistrict("TestDistrict");
+    void shouldCreateNewJamWhenLocationDoesNotExist() {
         when(jamRepository.findByLocation("TestLocation")).thenReturn(null);
-        when(jamRepository.save(jam)).thenReturn(jam);
-        Jam createdJam = jamService.create(jam);
-        assertEquals(jam, createdJam);
+        when(jamRepository.save(sampleJam)).thenReturn(sampleJam);
+
+        Jam createdJam = jamService.create(sampleJam);
+
+        assertEquals(sampleJam, createdJam);
+        verify(jamRepository, times(1)).save(sampleJam);
     }
 
     @Test
-    void testCreateExistingJam() {
-        Jam jam = new Jam();
-        jam.setLocation("TestLocation");
-        jam.setDistrict("TestDistrict");
-        when(jamRepository.findByLocation("TestLocation")).thenReturn(jam);
-        when(jamRepository.save(jam)).thenReturn(jam);
-        Jam createdJam = jamService.create(jam);
-        assertEquals(jam, createdJam);
+    void shouldUpdateExistingJamWhenLocationExists() {
+        when(jamRepository.findByLocation("TestLocation")).thenReturn(sampleJam);
+        when(jamRepository.save(sampleJam)).thenReturn(sampleJam);
+
+        Jam updatedJam = jamService.create(sampleJam);
+
+        assertEquals(sampleJam, updatedJam);
+        verify(jamRepository, times(1)).save(sampleJam);
     }
 
     @Test
-    void testDeactivateJamByLocation() {
-        Jam jam = new Jam();
-        jam.setLocation("TestLocation");
-        jam.setDistrict("TestDistrict");
-        when(jamRepository.findByLocation("TestLocation")).thenReturn(jam);
-        doNothing().when(jamRepository).delete(jam);
+    void shouldDeleteJamByLocation() {
+        when(jamRepository.findByLocation("TestLocation")).thenReturn(sampleJam);
+
         jamService.delete("TestLocation");
-        verify(jamRepository, times(1)).delete(jam);
+
+        verify(jamRepository, times(1)).delete(sampleJam);
     }
 
     @Test
-    void testFindJamsByDistrict() {
-        Jam jam = new Jam();
-        jam.setDistrict("TestDistrict");
-        when(jamRepository.findByDistrict("TestDistrict")).thenReturn(Collections.singletonList(jam));
+    void shouldFindJamsByDistrict() {
+        when(jamRepository.findByDistrict("TestDistrict")).thenReturn(Collections.singletonList(sampleJam));
+
         List<Jam> jams = jamService.findByDistrict("TestDistrict");
+
         assertEquals(1, jams.size());
-        assertEquals(jam, jams.getFirst());
+        assertEquals(sampleJam, jams.getFirst());
     }
 }
