@@ -18,83 +18,76 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class TrafficScannerApplicationTests {
 
-	@Autowired
-	private JamService jamService;
+    @Autowired
+    private JamService jamService;
 
-	@MockBean
-	private JamRepository jamRepository;
+    @MockBean
+    private JamRepository jamRepository;
 
-	@BeforeEach
-	void setUp() {
-	}
+    @BeforeEach
+    void setUp() {
+    }
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
-	@Test
-	void testDeleteAll() {
-		doNothing().when(jamRepository).deleteAll();
-		jamService.deleteAll();
-		verify(jamRepository, times(1)).deleteAll();
-	}
+    @Test
+    void testDeleteAll() {
+        doNothing().when(jamRepository).deleteAll();
+        jamService.deleteAll();
+        verify(jamRepository, times(1)).deleteAll();
+    }
 
-	@Test
-	void testFindAll() {
-		Jam jam = new Jam();
-		when(jamRepository.findAll()).thenReturn(Collections.singletonList(jam));
-		List<Jam> jams = jamService.findAll();
-		assertEquals(1, jams.size());
-		assertEquals(jam, jams.getFirst());
-	}
+    @Test
+    void testFindAll() {
+        Jam jam = new Jam();
+        when(jamRepository.findAll()).thenReturn(Collections.singletonList(jam));
+        List<Jam> jams = jamService.findAll();
+        assertEquals(1, jams.size());
+        assertEquals(jam, jams.getFirst());
+    }
 
-	@Test
-	void testCreateNewJam() {
-		Jam jam = new Jam();
-		jam.setLocation("TestLocation");
-		when(jamRepository.findByLocation("TestLocation")).thenReturn(null);
-		when(jamRepository.save(jam)).thenReturn(jam);
-		Jam createdJam = jamService.create(jam);
-		assertEquals(jam, createdJam);
-	}
+    @Test
+    void testCreateNewJam() {
+        Jam jam = new Jam();
+        jam.setLocation("TestLocation");
+        jam.setDistrict("TestDistrict");
+        when(jamRepository.findByLocation("TestLocation")).thenReturn(null);
+        when(jamRepository.save(jam)).thenReturn(jam);
+        Jam createdJam = jamService.create(jam);
+        assertEquals(jam, createdJam);
+    }
 
-	@Test
-	void testCreateExistingJam() {
-		Jam jam = new Jam();
-		jam.setLocation("TestLocation");
-		jam.setActive(false);
-		when(jamRepository.findByLocation("TestLocation")).thenReturn(jam);
-		when(jamRepository.save(jam)).thenReturn(jam);
-		Jam createdJam = jamService.create(jam);
-		assertTrue(createdJam.isActive());
-	}
+    @Test
+    void testCreateExistingJam() {
+        Jam jam = new Jam();
+        jam.setLocation("TestLocation");
+        jam.setDistrict("TestDistrict");
+        when(jamRepository.findByLocation("TestLocation")).thenReturn(jam);
+        when(jamRepository.save(jam)).thenReturn(jam);
+        Jam createdJam = jamService.create(jam);
+        assertEquals(jam, createdJam);
+    }
 
-	@Test
-	void testActivateJam() {
-		Jam jam = new Jam();
-		jam.setActive(false);
-		when(jamRepository.save(jam)).thenReturn(jam);
-		Jam activatedJam = jamService.activate(jam);
-		assertTrue(activatedJam.isActive());
-	}
+    @Test
+    void testDeactivateJamByLocation() {
+        Jam jam = new Jam();
+        jam.setLocation("TestLocation");
+        jam.setDistrict("TestDistrict");
+        when(jamRepository.findByLocation("TestLocation")).thenReturn(jam);
+        doNothing().when(jamRepository).delete(jam);
+        jamService.delete("TestLocation");
+        verify(jamRepository, times(1)).delete(jam);
+    }
 
-	@Test
-	void testDeactivateJamByLocation() {
-		Jam jam = new Jam();
-		jam.setLocation("TestLocation");
-		jam.setActive(true);
-		when(jamRepository.findByLocation("TestLocation")).thenReturn(jam);
-		when(jamRepository.save(jam)).thenReturn(jam);
-		Jam deactivatedJam = jamService.deactivate("TestLocation");
-		assertFalse(deactivatedJam.isActive());
-	}
-
-	@Test
-	void testDeactivateJam() {
-		Jam jam = new Jam();
-		jam.setActive(true);
-		when(jamRepository.save(jam)).thenReturn(jam);
-		Jam deactivatedJam = jamService.deactivate(jam);
-		assertFalse(deactivatedJam.isActive());
-	}
+    @Test
+    void testFindJamsByDistrict() {
+        Jam jam = new Jam();
+        jam.setDistrict("TestDistrict");
+        when(jamRepository.findByDistrict("TestDistrict")).thenReturn(Collections.singletonList(jam));
+        List<Jam> jams = jamService.findByDistrict("TestDistrict");
+        assertEquals(1, jams.size());
+        assertEquals(jam, jams.getFirst());
+    }
 }

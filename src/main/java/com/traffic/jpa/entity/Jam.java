@@ -17,8 +17,10 @@ public class Jam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String location;
 
     @Column
     private String name;
@@ -27,20 +29,11 @@ public class Jam {
     private String description;
 
     @Column
-    private OffsetDateTime startTime;
-
-    @Column
-    private OffsetDateTime endTime;
-
-    @Column
-    private String location;
-
-    @Column
-    private boolean active;
-
-    @Column
     @Enumerated(EnumType.STRING)
     private Severity severity;
+
+    @Column(nullable = false)
+    private String district;
 
     @Column
     private OffsetDateTime createdAt;
@@ -48,11 +41,15 @@ public class Jam {
     @Column
     private OffsetDateTime updatedAt;
 
+
     @PrePersist
     public void onCreate() {
         OffsetDateTime now = OffsetDateTime.now();
         setCreatedAt(now);
-        setUpdatedAt(now);
-        active = true;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        setUpdatedAt(OffsetDateTime.now());
     }
 }

@@ -1,12 +1,10 @@
 package com.traffic.service;
 
-
 import com.traffic.jpa.entity.Jam;
 import com.traffic.jpa.repository.JamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -27,27 +25,29 @@ public class JamService {
         return jamRepository.findAll();
     }
 
+    public List<Jam> findByDistrict(String district) {
+        return jamRepository.findByDistrict(district);
+    }
+
     public Jam create(Jam jam) {
-        Jam existent = jamRepository.findByLocation(jam.getLocation());
-        return existent != null ? activate(existent) : jamRepository.save(jam);
+        Jam existentJam = jamRepository.findByLocation(jam.getLocation());
+        if (existentJam != null) {
+            return updateExistingJam(existentJam, jam);
+        } else {
+            return jamRepository.save(jam);
+        }
     }
 
-    public Jam activate(Jam jam) {
-        return updateStatus(jam, true);
+    private Jam updateExistingJam(Jam existentJam, Jam newJam) {
+        existentJam.setDescription(newJam.getDescription());
+        existentJam.setSeverity(newJam.getSeverity());
+        return jamRepository.save(existentJam);
     }
 
-    public Jam deactivate(String location) {
-        Jam existent = jamRepository.findByLocation(location);
-        return existent != null ? deactivate(existent) : null;
-    }
-
-    public Jam deactivate(Jam jam) {
-        return updateStatus(jam, false);
-    }
-
-    private Jam updateStatus(Jam jam, boolean status) {
-        jam.setActive(status);
-        jam.setUpdatedAt(OffsetDateTime.now());
-        return jamRepository.save(jam);
+    public void delete(String location) {
+        Jam existentJam = jamRepository.findByLocation(location);
+        if (existentJam != null) {
+            jamRepository.delete(existentJam);
+        }
     }
 }

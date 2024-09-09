@@ -4,6 +4,7 @@ import com.traffic.jpa.entity.Jam;
 import com.traffic.service.JamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,35 +12,47 @@ import java.util.List;
 @RestController
 public class TrafficApi {
 
-    JamService jamService;
+    private final JamService jamService;
 
     @Autowired
     public TrafficApi(JamService jamService) {
         this.jamService = jamService;
     }
 
-    @GetMapping("/all")
-    List<Jam> getAllJams() {
-        return jamService.findAll();
-    }
-
-    @GetMapping("/deleteAll")
-    void deleteAllJams() {
-        jamService.deleteAll();
-    }
-
     @PostMapping("/create")
-    ResponseEntity<Jam> createJam(@RequestBody Jam jam) {
-        return ResponseEntity.ok(jamService.create(jam));
+    public ResponseEntity<Jam> createJam(@RequestBody Jam jam) {
+        Jam createdJam = jamService.create(jam);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdJam);
     }
 
-    @PutMapping("/deactivate/{location}")
-    ResponseEntity<Jam> deactivateJam(@PathVariable String location) {
-        return ResponseEntity.ok(jamService.deactivate(location));
+    @GetMapping("/getAllJams")
+    public ResponseEntity<List<Jam>> getAllJams() {
+        List<Jam> jams = jamService.findAll();
+        if (jams.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(jams);
     }
 
-    @PutMapping("/deactivate")
-    ResponseEntity<Jam> deactivateJam(@RequestBody Jam jam) {
-        return ResponseEntity.ok(jamService.deactivate(jam));
+    @GetMapping("/getJamsByDistrict/{district}")
+    public ResponseEntity<List<Jam>> getJamsByDistrict(@PathVariable String district) {
+        List<Jam> jams = jamService.findByDistrict(district);
+        if (jams.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(jams);
+    }
+
+    @DeleteMapping("/deleteAllJams")
+    public ResponseEntity<Void> deleteAllJams() {
+        jamService.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/deleteJamByLocation/{location}")
+    public ResponseEntity<Void> deleteJam(@PathVariable String location) {
+        jamService.delete(location);
+        return ResponseEntity.noContent().build();
     }
 }
+
