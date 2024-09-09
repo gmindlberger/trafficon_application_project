@@ -91,4 +91,13 @@ class TrafficScannerApplicationTests {
         assertEquals(1, jams.size());
         assertEquals(sampleJam, jams.getFirst());
     }
+
+    @Test
+    void shouldReturnEmptyWhenNoJamsFoundByDistrict() {
+        when(jamRepository.findByDistrict("NonExistentDistrict")).thenReturn(Collections.emptyList());
+
+        List<Jam> jams = jamService.findByDistrict("NonExistentDistrict");
+
+        assertTrue(jams.isEmpty());
+    }
 }
