@@ -11,11 +11,10 @@ This project is a simple Spring Boot-based REST API for managing and displaying 
 ## API Endpoints and Example Requests
 
 ### Create a Traffic Jam
-
 **POST** `/create`
 
 Example Request:
-
+```bash
 POST http://localhost:8080/create
 Content-Type: application/json
 
@@ -26,6 +25,7 @@ Content-Type: application/json
   "severity": "LOW",
   "district": "Salzburg"
 }
+
 
 ### Delete All Traffic Jams
 **DELETE** '/deleteAllJams'
