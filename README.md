@@ -26,9 +26,8 @@ Content-Type: application/json
   "district": "Salzburg"
 }
 
-
 ### Delete All Traffic Jams
-**DELETE** '/deleteAllJams'
+**DELETE** `/deleteAllJams`
 
 Example Request:
 
