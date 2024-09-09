@@ -3,7 +3,7 @@
 This project is a Spring Boot-based REST API for managing and displaying current traffic jams. It provides endpoints to create, retrieve, and delete traffic jams, as well as filter jams by district. The system uses a PostgreSQL database for persistent storage of traffic jam data and is designed to be flexible and easily extendable, allowing for the addition of new functionality.
 
 ## Features
-- **Create a Traffic Jam**: You can create a traffic jam with details such as location, description, and severity.
+- **Create a Traffic Jam**: You can create a traffic jam with details such as location, description, and severity. The location must be unique, as only one traffic jam can exist at a specific location at any given time.
 - **Retrieve All Traffic Jams**: A list of all currently registered traffic jams can be retrieved.
 - **Filter Traffic Jams by District**: Traffic jams can be filtered by district.
 - **Delete Traffic Jams**: All traffic jams or specific ones by location can be deleted.
