@@ -11,7 +11,7 @@ This project is a simple Spring Boot-based REST API for managing and displaying 
 ## API Endpoints and Example Requests
 
 ### Create a Traffic Jam
-```bash
+
 **POST** `/create`
 
 Example Request:
