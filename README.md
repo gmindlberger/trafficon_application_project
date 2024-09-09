@@ -13,8 +13,8 @@ This project is a simple Spring Boot-based REST API for managing and displaying 
 ### Create a Traffic Jam
 **POST** `/create`
 
-Example Requests:
-
+Example Request:
+```bash
 POST http://localhost:8080/create
 Content-Type: application/json
 
@@ -25,14 +25,3 @@ Content-Type: application/json
   "severity": "LOW",
   "district": "Salzburg"
 }
-
-DELETE http://localhost:8080/deleteAllJams
-
-@location=A2
-DELETE http://localhost:8080/deleteJamByLocation/{{location}}
-
-@district=Salzburg
-GET http://localhost:8080/getJamsByDistrict/{{district}}
-
-
-GET http://localhost:8080/getAllJams
